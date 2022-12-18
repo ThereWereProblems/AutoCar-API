@@ -17,6 +17,7 @@ namespace AutoCar.Services
         void RegisterUser(RegisterUserDto dto);
         bool Delete(int i);
         string GenerateJwt(LoginDto dto);
+        public UserView GetUser(int id);
         List<UserView> GetAll();
         void ChangePassword(NewPasswordDto dto);
         void EditUser(int id, UserEditDto dto);
@@ -47,7 +48,7 @@ namespace AutoCar.Services
             var newUser = new User()
             {
                 Name = dto.Name,
-                Login = dto.Login,
+                Email = dto.Email,
                 RoleId = dto.RoleId
             };
 
@@ -56,6 +57,7 @@ namespace AutoCar.Services
             _context.Users.Add(newUser);
             _context.SaveChanges();
         }
+
         public bool Delete(int i)
         {
             var user = _context.Users
@@ -70,10 +72,11 @@ namespace AutoCar.Services
             _context.SaveChanges();
             return true;
         }
+
         public string GenerateJwt(LoginDto dto)
         {
             var user = _context.Users.Include(x => x.Role)
-                .FirstOrDefault(u => u.Login == dto.Login);
+                .FirstOrDefault(u => u.Email == dto.Email);
             if (user is null)
             {
                 throw new BadRequestException("Invalid Login or password");
@@ -90,7 +93,8 @@ namespace AutoCar.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, $"{user.Name}"),
-                new Claim(ClaimTypes.Role, $"{user.Role.Name}")
+                new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
+                new Claim(ClaimTypes.Email, user.Email)
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -104,6 +108,18 @@ namespace AutoCar.Services
             var tokenHandler = new JwtSecurityTokenHandler();
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public UserView GetUser(int id)
+        {
+            var user = _context.Users
+                .FirstOrDefault(u => u.Id == id);
+            if (user == null)
+                throw new NotFoundException("User not exist");
+
+            var result = _mapper.Map<UserView>(user);
+
+            return result;
         }
 
         public List<UserView> GetAll()
@@ -144,7 +160,7 @@ namespace AutoCar.Services
                 throw new NotFoundException("User not exist");
 
             user.Name = dto.Name;
-            user.Login = dto.Login;
+            user.Email = dto.Email;
             _context.SaveChanges();
         }
 

@@ -41,6 +41,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultCennection")
     ));
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
@@ -108,3 +109,12 @@ app.UseCors();
 app.MapControllers();
 
 app.Run();
+
+void SeedDatabase() //can be placed at the very bottom under app.Run()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Seed();
+    }
+}

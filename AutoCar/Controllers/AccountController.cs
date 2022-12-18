@@ -2,7 +2,6 @@
 using AutoCar.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace AutoCar.Controllers
 {
@@ -45,7 +44,7 @@ namespace AutoCar.Controllers
             return Ok(token);
         }
 
-        [HttpGet("getusers")]
+        [HttpGet("getuser/{id}")]
         [Authorize(Roles = "Admin")]
         public ActionResult GetUsers()
         {
@@ -53,6 +52,16 @@ namespace AutoCar.Controllers
 
 
             return Ok(listOfUsers);
+        }
+
+        [HttpGet("getusers")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult GetUser([FromRoute] int id)
+        {
+            var user = _accountService.GetUser(id);
+
+
+            return Ok(user);
         }
 
         [HttpPatch("changepassword")]

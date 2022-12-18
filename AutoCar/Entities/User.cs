@@ -10,7 +10,7 @@ namespace AutoCar.Entities
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Login { get; set; }
+        public string Email { get; set; }
         [Required]
         public string PasswordHash { get; set; }
         public int RoleId { get; set; }
