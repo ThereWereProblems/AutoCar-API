@@ -16,7 +16,6 @@ namespace AutoCar.Controllers
         }
 
         [HttpPost("create")]
-        [Authorize(Roles = "Admin")]
         public ActionResult RegisterUrer([FromBody] RegisterUserDto dto)
         {
             _accountService.RegisterUser(dto);
@@ -50,7 +49,6 @@ namespace AutoCar.Controllers
         {
             var listOfUsers = _accountService.GetAll();
 
-
             return Ok(listOfUsers);
         }
 
@@ -74,9 +72,9 @@ namespace AutoCar.Controllers
 
         [HttpPatch("edituser/{id}")]
         [Authorize]
-        public ActionResult EditUser([FromRoute] int id, [FromBody] UserEditDto dto)
+        public ActionResult EditUser([FromBody] UserEditDto dto)
         {
-            _accountService.EditUser(id, dto);
+            _accountService.EditUser(dto);
             return Ok();
         }
 

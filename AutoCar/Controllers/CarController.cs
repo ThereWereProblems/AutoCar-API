@@ -25,7 +25,7 @@ namespace AutoCar.Controllers
         }
 
         [HttpGet("getCars")]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize]
         public List<Car> getCars()
         {
             return _carService.GetCars();

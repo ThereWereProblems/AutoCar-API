@@ -20,7 +20,7 @@ namespace AutoCar.Services
         public UserView GetUser(int id);
         List<UserView> GetAll();
         void ChangePassword(NewPasswordDto dto);
-        void EditUser(int id, UserEditDto dto);
+        void EditUser(UserEditDto dto);
         void ChangeRole(int id, ChangeRoleDto dto);
     }
     public class AccountService : IAccountService
@@ -150,12 +150,12 @@ namespace AutoCar.Services
             _context.SaveChanges();
         }
 
-        public void EditUser(int id, UserEditDto dto)
+        public void EditUser(UserEditDto dto)
         {
-            //var iduser = (int)_userContextService.GetUserId;
+            var iduser = (int)_userContextService.GetUserId;
 
             var user = _context.Users
-                .FirstOrDefault(u => u.Id == id);
+                .FirstOrDefault(u => u.Id == iduser);
             if (user == null)
                 throw new NotFoundException("User not exist");
 
