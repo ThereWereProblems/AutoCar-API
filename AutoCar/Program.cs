@@ -46,6 +46,7 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<IMarkService, MarkService>();
+builder.Services.AddScoped<IRepairService, RepairService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
