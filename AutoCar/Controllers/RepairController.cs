@@ -43,6 +43,16 @@ namespace AutoCar.Controllers
             return Ok(list);
         }
 
+        [HttpGet("car/{id}")]
+        [Authorize]
+        public ActionResult GetRepairsByCar([FromRoute] int id)
+        {
+            var list = _repairService.GetRepairsByCar(id);
+
+            return Ok(list);
+        }
+
+
         [HttpGet("todo")]
         [Authorize]
         public ActionResult GetToDoRepairs()
@@ -51,6 +61,16 @@ namespace AutoCar.Controllers
 
             return Ok(list);
         }
+
+        [HttpGet("todocar/{id}")]
+        [Authorize]
+        public ActionResult GetToDoRepairsByCar([FromRoute] int id)
+        {
+            var list = _repairService.GetToDoRepairsByCar(id);
+
+            return Ok(list);
+        }
+
 
         [HttpGet("{id}")]
         [Authorize]

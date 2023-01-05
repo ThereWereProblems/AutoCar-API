@@ -12,7 +12,9 @@ namespace AutoCar.Services
         public void OrderRepair(RepairDto dto);
         public void DoRepair(int id, DoRepairDto dto);
         public List<Repair> GetRepairs();
+        public List<Repair> GetRepairsByCar(int id);
         public List<Repair> GetToDoRepairs();
+        public List<Repair> GetToDoRepairsByCar(int id);
         public Repair GetRepair(int id);
         public void EditRepair(int id, RepairDto dto);
         public void EditDoneRepair(int id, DoRepairDto dto);
@@ -34,12 +36,20 @@ namespace AutoCar.Services
 
         public void OrderRepair(RepairDto dto)
         {
+            var car = _context.Cars
+             .FirstOrDefault(c => c.Id == dto.CarId);
+
+            if (car is null)
+                throw new NotFoundException($"Car with id {dto.CarId} not exist");
+
             if (String.IsNullOrEmpty(dto.Title) || String.IsNullOrEmpty(dto.Description))
                 throw new BadRequestException("Tile or description is empty");
+
             Repair repair= new Repair
             {
                 Title= dto.Title,
                 Description= dto.Description,
+                CarId = dto.CarId,
                 IsDone = false
             };
 
@@ -74,9 +84,23 @@ namespace AutoCar.Services
             return list;
         }
 
+        public List<Repair> GetRepairsByCar(int id)
+        {
+            var list = _context.Repairs.Where(x => x.CarId == id).ToList();
+
+            return list;
+        }
+
         public List<Repair> GetToDoRepairs()
         {
             var list = _context.Repairs.Where(x => x.IsDone == false).ToList();
+
+            return list;
+        }
+
+        public List<Repair> GetToDoRepairsByCar(int id)
+        {
+            var list = _context.Repairs.Where(x => x.IsDone == false && x.CarId == id).ToList();
 
             return list;
         }
