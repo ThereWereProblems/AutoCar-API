@@ -44,6 +44,7 @@ builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ICadService, CadService>();
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<IMarkService, MarkService>();
 builder.Services.AddScoped<IRepairService, RepairService>();
